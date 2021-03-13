@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta name="referrer" content="no-referrer" />
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>注册界面</title>
+    <script th:src="@{|/js/jquery-1.11.3.min.js|}"></script>
+    <script th:src="@{|/js/jQuery.md5.js|}"></script>
+    <script>
+        $(function(){
+            $("#loginBut").bind("click",function(){
+                var v_md5password=$.md5($("#password").val());
+                alert(v_md5password)
+                $("#md5Password").val(v_md5password)
+            })
+        })
+    </script>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link href="css/signin.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <form class="form-signin" action="/register/check" method="post">
+        <h2 class="form-signin-heading">注册账号</h2>
+        <label for="username" class="sr-only">用户名</label>
+        <input type="username" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        <label for="password" class="sr-only">密码</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        <div class="alert alert-danger" role="alert" th:if="${errorMessage != null}" th:inline="text">[[${errorMessage}]]</div>
+        <button id="loginBut" class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+    </form>
+
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

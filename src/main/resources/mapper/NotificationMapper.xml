@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.mapper.NotificationMapper">
+  <resultMap id="BaseResultMap" type="com.blog.model.Notification">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="notifier" jdbcType="INTEGER" property="notifier" />
+    <result column="receiver" jdbcType="INTEGER" property="receiver" />
+    <result column="outerid" jdbcType="INTEGER" property="outerid" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="createtime" jdbcType="BIGINT" property="createtime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, notifier, receiver, outerid, type, createtime, status
+  </sql>
+
+  <select id="getOuterIdById" resultType="java.lang.Integer">
+    select outerid from notification where id=#{id}
+  </select>
+
+  <select id="getTitleById" resultType="java.lang.String">
+    select title from question where id=#{outerid}
+  </select>
+
+  <select id="count" resultType="java.lang.Integer">
+    select count(1) from notification where receiver=#{id}
+  </select>
+
+  <select id="getTypeById" resultType="java.lang.Integer">
+    select type from notification where id=#{id}
+  </select>
+
+  <select id="list" resultType="com.blog.model.Notification">
+    select
+    <include refid="Base_Column_List"/>
+    from notification where receiver=#{id} order by createtime desc
+  </select>
+
+
+  <update id="updateStatus">
+    update notification set status=1 where id=#{id} and status=0
+  </update>
+
+
+
+  <insert id="insertNotification">
+    insert into notification(notifier,receiver,outerid,type,createtime,status)
+    values (#{notifier},#{receiver},#{outerid},#{type},#{createtime},#{status})
+  </insert>
+
+  <select id="getUnreadCount" resultType="java.lang.Integer">
+    select count(1)
+    from notification
+    where receiver=#{id} and status=0
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from notification
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from notification
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blog.model.Notification">
+    insert into notification (id, notifier, receiver, 
+      outerid, type, createtime, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{notifier,jdbcType=INTEGER}, #{receiver,jdbcType=INTEGER}, 
+      #{outerid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{createtime,jdbcType=BIGINT}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blog.model.Notification">
+    insert into notification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="notifier != null">
+        notifier,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="outerid != null">
+        outerid,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="notifier != null">
+        #{notifier,jdbcType=INTEGER},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=INTEGER},
+      </if>
+      <if test="outerid != null">
+        #{outerid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blog.model.Notification">
+    update notification
+    <set>
+      <if test="notifier != null">
+        notifier = #{notifier,jdbcType=INTEGER},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=INTEGER},
+      </if>
+      <if test="outerid != null">
+        outerid = #{outerid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blog.model.Notification">
+    update notification
+    set notifier = #{notifier,jdbcType=INTEGER},
+      receiver = #{receiver,jdbcType=INTEGER},
+      outerid = #{outerid,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
